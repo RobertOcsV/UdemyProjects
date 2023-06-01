@@ -92,7 +92,9 @@ function buildAccount(){
         if (!checkAccount(accountName)) {
           return deposit()
         }       
+
       })
+      .catch((err) => console.log(err))
   }
 
  function checkAccount(accountName) {
