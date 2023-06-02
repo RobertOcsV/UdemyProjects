@@ -21,10 +21,8 @@ function operation(){
             deposit()
         } else if (action === 'Consultar Saldo'){
             checkBalance()
-        } else if (action === 'Consultar Saldo'){
-
         } else if (action === 'Sacar'){
-
+            withdraw()
         } else if (action === 'Sair'){
             console.log(chalk.bgBlue.black('Obrigado por usar o Accounts'))
             process.exit();
@@ -111,6 +109,7 @@ function buildAccount(){
       .catch((err) => console.log(err))
   }
 
+  //consulting balance account
 
   function checkBalance() {
     inquirer
@@ -138,7 +137,71 @@ function buildAccount(){
       .catch((err) => console.log(err))
   }
 
+  
+// withdraw an amount from user account
+function withdraw(){
+    inquirer.prompt([
+        {
+        name: 'accountName',
+        message: 'Qual o nome da sua conta?'
+        }
+    ]).then((answer) => {
+
+        const accountName = answer['accountName']    
+
+        if(!checkAccount(accountName)){
+            return withdraw()
+        }
+
+
+        inquirer.prompt([
+            {
+                name: 'amount',
+                message: 'Quanto você deseja sacar?'
+            }
+        ]).then((answer) => {
+
+            const amount = answer['amount']
+            removeAmount(accountName, amount)            
+
+        }).catch(err => console.log(err))
+
+    }).catch(err => console.log(err))
+}
+ 
+
+
+
   // global functions:
+
+
+  function removeAmount(accountName, amount){
+
+    const accountData = getAccount(accountName)
+
+    if(!amount){
+        console.log(chalk.bgRed.black('Ocorreu um erro, tente novamente mais tarde!'))
+        return withdraw()
+    }
+
+    if(accountData.balance < amount){
+        console.log(chalk.bgRed.black('Valor indisponível!'))
+        return withdraw()
+    }
+
+    accountData.balance = parseFloat(accountData.balance) - parseFloat(amount)
+
+    fs.writeFileSync(
+        `accounts/${accountName}.json`,
+        JSON.stringify(accountData),
+        function(err) {
+            console.log(err)
+        }
+    )
+
+    console.log(chalk.green(`Foi realizado um saque de R$${amount} da sua conta!`))
+    operation()
+  }
 
  function checkAccount(accountName) {
   if (!fs.existsSync(`accounts/${accountName}.json`)) {
@@ -175,4 +238,3 @@ function getAccount(accountName){
     return JSON.parse(accountJSON)
 }
 
- 
