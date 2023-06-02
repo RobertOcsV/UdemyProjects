@@ -20,7 +20,7 @@ function operation(){
         } else if (action === 'Depositar'){
             deposit()
         } else if (action === 'Consultar Saldo'){
-
+            checkBalance()
         } else if (action === 'Consultar Saldo'){
 
         } else if (action === 'Sacar'){
@@ -111,6 +111,35 @@ function buildAccount(){
       .catch((err) => console.log(err))
   }
 
+
+  function checkBalance() {
+    inquirer
+      .prompt([
+        {
+          name: 'accountName',
+          message: 'Qual o nome da sua conta?',
+        },
+      ])
+      .then((answer) => {
+        const accountName = answer['accountName']
+  
+        if (!checkAccount(accountName)) {
+          return checkBalance()
+        }       
+        const accountData = getAccount(accountName)
+        const balance = accountData.balance   
+            console.log(
+                chalk.green(`${accountName}. o saldo atual da sua conta é de: R$${balance}`)
+                ) 
+            operation()
+
+                      
+      })
+      .catch((err) => console.log(err))
+  }
+
+  // global functions:
+
  function checkAccount(accountName) {
   if (!fs.existsSync(`accounts/${accountName}.json`)) {
     console.log(chalk.bgRed.black('Esta conta não existe, escolha outro nome!'))
@@ -125,9 +154,7 @@ function addAmount(accountName, amount){
         console.log(chalk.bgRed.black('Ocorreu um erro, tente novamente mais tarde!'))
         return deposit()
     }
-
     accountData.balance = parseFloat(amount) + parseFloat(accountData.balance)
-
     fs.writeFileSync(
         `accounts/${accountName}.json`,
         JSON.stringify(accountData),
@@ -135,20 +162,16 @@ function addAmount(accountName, amount){
             console.log(err)
         },
     )
-
     console.log(
-        chalk.green(`${accountName} Foi depositado um valor de: R$${amount} na sua conta!`)
-        )
-    operation()
+        chalk.green(`${accountName}. Foi depositado um valor de: R$${amount} na sua conta!`)
+        ) 
 }
 
 function getAccount(accountName){
-
     const accountJSON = fs.readFileSync(`accounts/${accountName}.json`, {
         enconding: 'utf8',
         flag: 'r'   
     })
-
     return JSON.parse(accountJSON)
 }
 
