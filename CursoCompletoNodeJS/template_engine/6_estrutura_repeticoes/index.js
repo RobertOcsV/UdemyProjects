@@ -7,11 +7,17 @@ app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars')
 app.get('/dashboard', (req, res) => {
 
-    const items = ["item a", "item b", "item c"]
+
+  
+        const pessoas = [
+            {idade: 12, nome: "Lucas"},
+            {idade: 17, nome: "Jorge"},
+            {idade: 19, nome: "Rogerio"}
+        ]
+   
 
 
-
-    res.render('dashboard', { items })
+    res.render('dashboard',  {pessoas} )
 })
 
 app.get('/', (req, res) => {
@@ -26,7 +32,7 @@ app.get('/', (req, res) => {
 
     const approved = false
 
-    res.render('home', {user: user, palavra, auth, approved})
+    res.render('home', {user: user, auth, approved})
 })
 
 app.listen(3000, () => {
