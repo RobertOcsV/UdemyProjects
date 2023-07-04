@@ -3,12 +3,11 @@ const exphbs = require("express-handlebars")
 
 const app = express()
 
-
 const hbs = exphbs.create({
-    partialsDir: ["views/partials"]
+    partialsDir: ['views/partials']
 })
 
-app.engine('handlebars', hbs.engine()) 
+app.engine('handlebars', exphbs.engine()) 
 app.set('view engine', 'handlebars')
 app.get('/dashboard', (req, res) => {
 
@@ -32,36 +31,30 @@ app.get('/post', (req, res) => {
     res.render('blogpost', { post })
 } )
 
-app.get('blog', (req, res) =>{
+app.get('/blog', (req, res) => {
     const posts = [
         {
             title: "Aprender Node.js",
             category: "Javascript",
-            body: "Teste",
-            comments: 4
+            body: "php",
+            comments: 5
         },
         {
             title: "Aprender Ruby",
             category: "Javascript",
-            body: "Teste",
-            comments: 4
+            body: "teste",
+            comments: 5
         },
         {
-            title: "Aprender Angular",
+            title: "Aprender Mince",
             category: "Javascript",
-            body: "Teste",
-            comments: 4
-        },
-        {
-            title: "Aprender CSS3",
-            category: "Javascript",
-            body: "Teste",
-            comments: 4
+            body: "loop",
+            comments: 5
         },
     ]
 
     res.render("blog", { posts })
-})
+} )
 
 app.get('/', (req, res) => {
     
