@@ -1,1 +1,11 @@
- <h1>Olá HandleBars</h1>
+ <h1>Site padaria zé da manga</h1>
+
+<h1>Produtos zé da manga</h1>
+{{#each produtos}}
+<div>
+    <h3>{{this.name}}</h3>
+    <p>{{this.price}}</p>
+</div>
+
+<p><a href="/produto/{{this.id}}">Ver produto</a></p>
+{{/each}}
