@@ -15,7 +15,7 @@ app.use(express.json())
 app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars')
 
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
     res.render("home")
@@ -67,6 +67,24 @@ app.get('/books/:id', (req, res)=> {
         const book = data[0]
 
         res.render('book', { book })
+    })
+})
+
+app.get('/books/edit/:id', (req, res) => {
+    const id = req.params.id
+
+    const sql = `SELECT * FROM books WHERE id = ${id}`
+
+    conn.query(sql, (err, data)=> {
+        if(err){
+            console.log(err)
+            return
+        }
+
+        const book = data[0]
+
+        res.render('editbook', { book })
+
     })
 })
 
