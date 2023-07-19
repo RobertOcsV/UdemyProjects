@@ -1,6 +1,7 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
-const mysql = require('mysql')
+// const mysql = require('mysql')
+const pool = require('./db/conn')
 
 const app = express()
 
@@ -27,7 +28,7 @@ app.post('/books/insertbook', (req, res) => {
 
     const sql = `INSERT INTO books (title, pageqty) VALUES ('${title}', '${pageqty}')`
 
-    conn.query(sql, (err)=> {
+    pool.query(sql, (err)=> {
         if(err){
             console.log(err)
             return
@@ -41,7 +42,7 @@ app.post('/books/insertbook', (req, res) => {
 app.get('/books', (req, res) => {
     const sql = 'SELECT * FROM books'
 
-    conn.query(sql, function(err, data) {
+    pool.query(sql, function(err, data) {
         if(err){
             console.log(err)
             return
@@ -58,7 +59,7 @@ app.get('/books/:id', (req, res)=> {
 
     const sql = `SELECT * FROM books WHERE id = ${id}`
 
-    conn.query(sql, (err, data) =>{
+    pool.query(sql, (err, data) =>{
         if(err){
             console.log(err)
             return
@@ -74,7 +75,7 @@ app.get('/books/edit/:id', (req, res) => {
 
     const sql = `SELECT * FROM books WHERE id = ${id}`
 
-    conn.query(sql, (err, data)=> {
+    pool.query(sql, (err, data)=> {
         if(err){
             console.log(err)
             return
@@ -95,7 +96,7 @@ app.post('/books/updatebook', (req, res) => {
 
     const sql = `UPDATE books SET title = '${title}', pageqty = '${pageqty}' WHERE id = '${id}'`
 
-    conn.query(sql, (err) => {
+    pool.query(sql, (err) => {
         if(err){
             console.log(err)
             return
@@ -113,7 +114,7 @@ app.post('/books/remove/:id', (req, res) => {
 
     const sql = `DELETE FROM books WHERE id = ${id}`
 
-    conn.query(sql, (err) => {
+    pool.query(sql, (err) => {
         if(err){
             console.log(err)
             return
@@ -124,23 +125,24 @@ app.post('/books/remove/:id', (req, res) => {
 
 })
 
+app.listen(3000)
 
 
-const conn = mysql.createConnection({
-    host:'localhost',
-    user: 'root',
-    password:'',
-    database: 'nodemysql'
-})
+// const conn = mysql.createConnection({
+//     host:'localhost',
+//     user: 'root',
+//     password:'',
+//     database: 'nodemysql'
+// })
 
-conn.connect((err) => {
+// conn.connect((err) => {
 
-    if(err){
-        console.log(err)
-        return
-    }
+//     if(err){
+//         console.log(err)
+//         return
+//     }
 
-    console.log('Conectou ao MySql!')
+//     console.log('Conectou ao MySql!')
 
-    app.listen(3000)
-})
+    
+// })
