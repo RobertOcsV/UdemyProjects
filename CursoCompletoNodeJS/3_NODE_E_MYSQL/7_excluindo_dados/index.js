@@ -47,8 +47,7 @@ app.get('/books', (req, res) => {
             return
         }
         const books = data
-
-        console.log(books)
+       
 
         res.render('books', { books })
     })
@@ -108,9 +107,11 @@ app.post('/books/updatebook', (req, res) => {
 })
 
 
-app.delete((req, res) => {
+app.post('/books/remove/:id', (req, res) => {
 
-    const sql = `DELETE from books WHERE id = '${id}'`
+    const id = req.params.id
+
+    const sql = `DELETE FROM books WHERE id = ${id}`
 
     conn.query(sql, (err) => {
         if(err){
